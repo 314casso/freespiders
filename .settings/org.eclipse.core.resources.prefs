@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//spinner/spinner/data/external_mappers.py=utf-8
+encoding//spinner/spinner/items.py=utf-8
+encoding//spinner/spinner/models.py=utf-8
+encoding//spinner/spinner/pipelines.py=utf-8
+encoding//spinner/spinner/spiders/avito.py=utf-8
+encoding//spinner/spinner/test.py=utf-8
+encoding//spinner/spinner/utils/avito_parsers.py=utf-8
+encoding//spinner/spinner/utils/data_parsers.py=utf-8
+encoding//spinner/spinner/utils/utils.py=utf-8

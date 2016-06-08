@@ -1,0 +1,9 @@
+/__init__.pyc
+/items.pyc
+/models.pyc
+/pipelines.pyc
+/settings.pyc
+/ghostdriver.log
+/db/
+/local_settings.py
+/test.py
