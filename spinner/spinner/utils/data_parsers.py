@@ -90,8 +90,8 @@ class BaseFieldsParser(object):
         item['price'] = self.prices()['price']
         item['price_digit'] = self.prices()['price_digit']
         item['url'] = self.url()
-        item['estate_type'] = self.estate_type()                        
-        item['locality'] = self.locality()        
+        item['estate_type_id'] = self.estate_type()                        
+        item['locality_id'] = self.locality()        
         item['room_count'] = self.room_count()  
     
     def title(self):

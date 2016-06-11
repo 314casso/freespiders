@@ -1,13 +1,14 @@
 from playhouse.migrate import *  # @UnusedWildImport
+from spinner.models import db
 
 # SQLite example:
-my_db = SqliteDatabase('../spidermeta.db')
-migrator = SqliteMigrator(my_db)
 
-test_field = CharField(default='')
+migrator = SqliteMigrator(db)
 
-with my_db.transaction():
+origin_id = IntegerField(null=True)
+
+with db.transaction():
     migrate(
-        #migrator.add_column('spidermeta', 'test', test_field),
-        migrator.drop_column('spidermeta', 'test'),    
+        #migrator.add_column('spideritem', 'origin_id', origin_id),
+        migrator.drop_column('spideritem', 'region_id'),    
     )   

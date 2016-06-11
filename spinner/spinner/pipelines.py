@@ -11,17 +11,20 @@ avito_webdriver = AvitoWebdriver()
 
 class AvitoPipeline(object): 
     def process_item(self, item, spider):       
-        self._create_spyder_meta(spider.name, item)
+        self._create_spyder_meta(spider, item)
         return item
     
     def _create_spyder_meta(self, spider, item):      
         url = self.prepare_value('url', item)          
-        spider_item, created = SpiderItem.create_or_get(spider=spider, url=url)  # @UnusedVariable
+        spider_item, created = SpiderItem.create_or_get(spider=spider.name, url=url)  # @UnusedVariable
         for key in item.iterkeys():
             value = self.prepare_value(key, item)
             if value:
                 setattr(spider_item, key, value)        
-        spider_item.set_status()   
+        spider_item.set_status()
+        spider_item.origin_id = spider.ORIGIN_ID
+        full_url = item['url']
+        spider_item.full_url = full_url if isinstance(full_url, basestring) else full_url[0]            
         spider_item.save()
         return spider_item
 
