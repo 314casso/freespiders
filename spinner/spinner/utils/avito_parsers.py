@@ -65,7 +65,7 @@ class AvitoFleldsParser(BasePhoneImageParser):
             result = self.re_mapper(mapper, txt)
             if callable(result):
                 return result()
-        return result or self.ZDANIE
+        return result or EstateTypeMapper.ZDANIE
         
     def phone_parser(self): 
         return self._sel.xpath('//i[@class="icon-phone-sign red_phone"]/../text()').extract()        
