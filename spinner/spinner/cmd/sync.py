@@ -5,14 +5,15 @@ from os.path import dirname
 import logging
 import datetime
 import xmlrpclib
-from spinner.local_settings import SERVERS
 import ssl
 
 PROJECT_PATH = dirname(dirname(dirname(os.path.realpath(__file__))))
 sys.path.append(PROJECT_PATH)
 
+from spinner.utils.utils import Indicator
 from spinner.models import SpiderItem
 from spinner.settings import SITE_ROOT
+from spinner.local_settings import SERVERS
 
 logging.basicConfig(filename=os.path.join(SITE_ROOT, 'xmlrpc.log'),level=logging.INFO, format='%(asctime)s %(message)s')
 
@@ -29,22 +30,25 @@ def get_proxy(key='local'):
     proxy = xmlrpclib.ServerProxy(srvr['url'], allow_none=True, context=context)
     return proxy
 
-q = SpiderItem.select().where(SpiderItem.status==SpiderItem.NEW) 
-for item in q:
-    item_dict = item.get_item_dict()        
-    proxy = get_proxy('prime')
+q = SpiderItem.select().where(SpiderItem.status==SpiderItem.NEW)
+lots = len(q)
+ind = Indicator(lots)
+for item in q:        
+    item_dict = item.get_item_dict()              
+    proxy = get_proxy('prime')    
     try:
+        ind.update()
         result = proxy.add_lot(item_dict)
         status = result.get('status')        
         if status == SpiderItem.PROCESSED:
             item.estate_id = result['estate_id']
             item.status = SpiderItem.PROCESSED    
-            logging.info("Processed estate_id: %s" % item.estate_id)                    
+            logging.info("id: %s, processed estate_id: %s" % (item.id, item.estate_id))                    
         elif status is not None:
             item.status = status
-            logging.error(result['error_message'])        
+            logging.error("id: %s, %s" % (item.id, result['error_message']))        
         else:
-            logging.error('Result without status')
+            logging.error('id: %s, result without status' % item.id)
         item.event_date = datetime.datetime.now()
         item.save()
     except Exception, e:

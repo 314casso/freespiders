@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from urlparse import urlparse
 from spinner.models import SpiderItem
+import sys
 
 def join_strings(strings, delim=u''):
     if not strings:
@@ -21,3 +22,17 @@ def get_url_path(url):
         link = url if isinstance(url, basestring) else url[0]                 
         o = urlparse(link)
         return o.path
+
+
+class Indicator(object):
+    def __init__(self, cnt):
+        self._cnt = cnt
+        self._step = 20.0 / (cnt)         
+        self._progress = 0.0
+        sys.stdout.write("Total objects: %s" % cnt) 
+    def update(self):
+        self._progress += self._step 
+        if int(self._progress) != int(self._progress-self._step):
+            sys.stdout.write('\r')
+            sys.stdout.write("[%-20s] %d%%" % ('='*int(self._progress), 5*int(self._progress)))
+            sys.stdout.flush()
