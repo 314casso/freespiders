@@ -9,7 +9,8 @@ class ImageDecoder(object):
     WHITE_COLOR = 255
     _in_image = None
     _out_image = None  
-    DASH_LEN = 4  
+    DASH_LEN = 11  
+    DASH_SIZE = 4
     def __init__(self, settings, comparator):
         self._path = settings['icons_path']        
         self._iconset = settings['iconset']
@@ -42,7 +43,7 @@ class ImageDecoder(object):
             self._clear_dashes(self._out_image)        
         return self._out_image
     
-    def _clear_dashes(self, im):
+    def _clear_dashes(self, im):        
         pixdata = im.load()
         dash = []       
         for x in range(self._in_image.size[0]): #width
@@ -50,7 +51,7 @@ class ImageDecoder(object):
             for y in range(self._in_image.size[1]): #height
                 if pixdata[x, y] == self._color_index:
                     pix_in_vline.append((x, y))            
-            if len(pix_in_vline) == 1:
+            if len(pix_in_vline) == self.DASH_SIZE:
                 if dash and dash[-1][1] != pix_in_vline[0][1]:
                     del dash[:]
                 dash.append(pix_in_vline[0])
@@ -58,10 +59,11 @@ class ImageDecoder(object):
                 del dash[:]
             if len(dash) == self.DASH_LEN:
                 for pix in dash:
-                    pixdata[pix[0], pix[1]] = self.WHITE_COLOR
+                    for i in range(0, self.DASH_LEN-1):
+                        pixdata[pix[0], pix[1]+i] = self.WHITE_COLOR                   
                 del dash[:]
         
-    def _prepare_letters(self, max_len=6):  
+    def _prepare_letters(self, max_len=20):  
         inletter = foundletter = False        
         start = end = 0  
         letters = []    
@@ -98,7 +100,10 @@ class ImageDecoder(object):
         count = 0
         for letter in self._prepare_letters():
             m = hashlib.md5()
-            croped_image = self._get_out_image().crop(( letter[0] ,0, letter[1], self._get_out_image().size[1] ))
+            out_image = self._get_out_image()
+            out_image.save(os.path.join(self._path, "out.png"))
+            #return
+            croped_image = out_image.crop(( letter[0] ,0, letter[1], self._get_out_image().size[1] ))
             m.update("%s%s"%(time.time(), count))
             file_name = "%s.png" % count             
             croped_image.save(os.path.join(self._path, file_name))

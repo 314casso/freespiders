@@ -7,6 +7,7 @@ import subprocess
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.by import By
 from spinner.settings import MEDIA_ROOT
 from spinner.settings import AVITO_LOGIN
 
@@ -41,11 +42,11 @@ class AvitoWebdriver(object):
         login_url = AVITO_LOGIN['login_url']    
         driver.get(login_url)  
         try:
-            WebDriverWait(driver, 30).until(lambda driver : driver.find_element_by_name("password")).send_keys(password)
+            WebDriverWait(driver, 10).until(lambda driver : driver.find_element_by_name("password")).send_keys(password)
         except WebDriverException:
             return # already loged in                     
-        WebDriverWait(driver, 30).until(lambda driver : driver.find_element_by_name("login")).send_keys(username)        
-        WebDriverWait(driver, 30).until(lambda driver : driver.find_element_by_class_name("button-origin-yellow")).submit()        
+        WebDriverWait(driver, 10).until(lambda driver : driver.find_element_by_name("login")).send_keys(username)        
+        WebDriverWait(driver, 10).until(lambda driver : driver.find_element_by_class_name("button-origin-yellow")).submit()        
     
     def get_full_filename(self, url):   
         today = datetime.date.today()
@@ -58,17 +59,18 @@ class AvitoWebdriver(object):
             return full_filename
            
         driver = self.get_driver()                                
-        driver.get(url)            
-        elem = driver.find_element_by_class_name("js-phone-show__insert")
-        elem.click()
-        WebDriverWait(driver, 10).until(lambda driver : driver.find_element_by_class_name("description__phone-img"))           
+        driver.get(url)           
+        elem = driver.find_element_by_class_name("js-item-phone-button_card")
+        elem.click()        
+        WebDriverWait(driver, 10).until(lambda driver : driver.find_elements(By.XPATH, '//div/div/button/img'))           
         res = driver.execute_script("""
-          var phone_imgs = document.getElementsByClassName("description__phone-img");
+          var imgs = document.evaluate("//div/div/button/img", document, null, XPathResult.ANY_TYPE, null);
+          var phone_img = imgs.iterateNext();
           var canvas = document.createElement("canvas");
-          canvas.width = 102;
-          canvas.height = 16;
+          canvas.width = 315;
+          canvas.height = 50;
           var ctx = canvas.getContext("2d");          
-          ctx.drawImage(phone_imgs[0], 0, 0);
+          ctx.drawImage(phone_img, 0, 0);
           return canvas.toDataURL("image/png").split(",")[1];
         """)       
         plaindata = base64.b64decode(res)        

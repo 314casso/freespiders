@@ -12,7 +12,7 @@ from spinner.pipelines import avito_webdriver
 DECODER_SETTINGS = {
            'avito_phone': {
                             'icons_path': os.path.join(MEDIA_ROOT, 'avito_lib'),
-                            'iconset': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-'],
+                            'iconset': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
                             }                     
            }
 

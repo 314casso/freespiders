@@ -30,12 +30,12 @@ def get_proxy(key='local'):
     proxy = xmlrpclib.ServerProxy(srvr['url'], allow_none=True, context=context)
     return proxy
 
-q = SpiderItem.select().where(SpiderItem.status==SpiderItem.NEW)
+q = SpiderItem.select().where(SpiderItem.status==SpiderItem.PROCESSED)
 lots = len(q)
 ind = Indicator(lots)
 for item in q:        
     item_dict = item.get_item_dict()              
-    proxy = get_proxy('prime')    
+    proxy = get_proxy('local')    
     try:
         ind.update()
         result = proxy.add_lot(item_dict)
