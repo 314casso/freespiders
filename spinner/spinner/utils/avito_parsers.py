@@ -26,7 +26,7 @@ class AvitoFleldsParser(BasePhoneImageParser):
         super(AvitoFleldsParser, self).__init__(*a, **kw)
         
     def title_parser(self):
-        return self._sel.xpath('//h1[@itemprop="name"]/text()').extract()
+        return self._sel.xpath('//h1[@class="title-info-title"]/span/text()').extract()
 
     def breadcrumbs_parser(self):
         breadcrumbs = self._sel.xpath('//a[@class="breadcrumb-link"]/text()')
@@ -85,7 +85,7 @@ class AvitoFleldsParser(BasePhoneImageParser):
                 return l 
     
     def name_parser(self):
-        return self._sel.xpath('//div[@itemprop="seller"]/strong[@itemprop="name"]/text()').extract()  
+        return self._sel.xpath('//div[@class="seller-info-name"]/text()').extract()  
     
     def desc_parser(self):        
         result = []
@@ -95,7 +95,7 @@ class AvitoFleldsParser(BasePhoneImageParser):
         return result
     
     def price_parser(self):
-        return self._sel.xpath('//span[@itemprop="price"]/text()').re(r'\d')
+        return self._sel.xpath('//span[@class="price-value-string"]/text()').re(r'\d')
     
     def mesure_parser(self):
         return u'руб.'
