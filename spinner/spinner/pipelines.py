@@ -38,6 +38,6 @@ class AvitoPipeline(object):
             return value        
         if len(value) == 1:
             return value[0]        
-        value = [u'%s' % v for v in value if v]
-        return u','.join(value) 
+        value = [u'%s' % v for v in value if v]        
+        return u','.join(set(value)) 
     
