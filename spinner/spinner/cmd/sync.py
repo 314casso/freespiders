@@ -6,6 +6,7 @@ import logging
 import datetime
 import xmlrpclib
 import ssl
+import socket
 
 PROJECT_PATH = dirname(dirname(dirname(os.path.realpath(__file__))))
 sys.path.append(PROJECT_PATH)
@@ -33,9 +34,12 @@ def get_proxy(key='local'):
 q = SpiderItem.select().where(SpiderItem.status==SpiderItem.PROCESSED)
 lots = len(q)
 ind = Indicator(lots)
+
+remote_settings_key = 'local' if socket.gethostname() == 'picasso-kubuntu' else 'prime'
+
 for item in q:        
     item_dict = item.get_item_dict()              
-    proxy = get_proxy('local')    
+    proxy = get_proxy(remote_settings_key)    
     try:
         ind.update()
         result = proxy.add_lot(item_dict)
