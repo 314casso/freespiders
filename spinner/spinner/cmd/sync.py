@@ -31,7 +31,7 @@ def get_proxy(key='local'):
     proxy = xmlrpclib.ServerProxy(srvr['url'], allow_none=True, context=context)
     return proxy
 
-q = SpiderItem.select().where(SpiderItem.status==SpiderItem.PROCESSED)
+q = SpiderItem.select().where(SpiderItem.status==SpiderItem.NEW)
 lots = len(q)
 ind = Indicator(lots)
 
