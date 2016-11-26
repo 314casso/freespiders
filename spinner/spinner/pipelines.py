@@ -35,9 +35,9 @@ class AvitoPipeline(object):
         if key == 'url':
             return get_url_path(value)                               
         if type(value) in (int, float, str):
-            return value        
-        if len(value) == 1:
-            return value[0]        
-        value = [u'%s' % v for v in value if v]        
+            if type(value) == str:
+                value = value.strip()           
+            return value       
+        value = [u'{0}'.format(v).strip() for v in value if v]      
         return u','.join(set(value)) 
     
