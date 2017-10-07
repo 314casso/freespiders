@@ -16,7 +16,7 @@ class AvitoPipeline(object):
     
     def _create_spyder_meta(self, spider, item):      
         url = self.prepare_value('url', item)          
-        spider_item, created = SpiderItem.create_or_get(spider=spider.name, url=url)  # @UnusedVariable
+        spider_item, created = SpiderItem.get_or_create(spider=spider.name, url=url)  # @UnusedVariable
         for key in item.iterkeys():
             value = self.prepare_value(key, item)
             if value:

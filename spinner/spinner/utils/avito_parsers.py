@@ -26,10 +26,10 @@ class AvitoFleldsParser(BasePhoneImageParser):
         super(AvitoFleldsParser, self).__init__(*a, **kw)
         
     def title_parser(self):
-        return set(self._sel.xpath('//h1[@class="title-info-title"]/span/text()').extract())
+        return set(self._sel.xpath('//h1[contains(@class, "title-info-title")]/span/text()').extract())
 
     def breadcrumbs_parser(self):
-        breadcrumbs = self._sel.xpath('//a[@class="breadcrumb-link"]/text()')
+        breadcrumbs = self._sel.xpath('//a[contains(@class, "breadcrumb-link")]/text()')
         
         breadcrumb = breadcrumbs[-1].extract().lower()
         return breadcrumb
@@ -68,7 +68,7 @@ class AvitoFleldsParser(BasePhoneImageParser):
         return result or EstateTypeMapper.ZDANIE
         
     def phone_parser(self): 
-        return self._sel.xpath('//i[@class="icon-phone-sign red_phone"]/../text()').extract()        
+        return self._sel.xpath('//i[contains(@class, "icon-phone-sign")]/../text()').extract()        
     
     def room_count_parser(self):
         title = self.title()
@@ -85,7 +85,7 @@ class AvitoFleldsParser(BasePhoneImageParser):
                 return l 
     
     def name_parser(self):
-        return set(self._sel.xpath('//div[@class="item-view-right"]//div[@class="seller-info-name"]/text()').extract())  
+        return set(self._sel.xpath('//div[contains(@class, "item-view-seller-info")]//div[contains(@class, "seller-info-name")]/a/text()').extract())  
     
     def desc_parser(self):        
         result = []
@@ -95,7 +95,7 @@ class AvitoFleldsParser(BasePhoneImageParser):
         return result
     
     def price_parser(self):
-        return self._sel.xpath('//div[@class="item-view-right"]//span[@class="price-value-string"]/text()').re(r'\d')
+        return self._sel.xpath('//div[contains(@class, "item-view-right")]//span[contains(@class, "price-value-string")]/text()').re(r'\d')
     
     def mesure_parser(self):
         return u'руб.'

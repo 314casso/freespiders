@@ -30,8 +30,7 @@ class AvitoWebdriver(object):
     def _get_driver(self):   
         dcap = dict(DesiredCapabilities.PHANTOMJS)
         dcap["phantomjs.page.settings.userAgent"] = (
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/53 "
-            "(KHTML, like Gecko) Chrome/15.0.87"
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/61.0.3163.79 Chrome/61.0.3163.79 Safari/537.36"            
         )
         return webdriver.PhantomJS(port=65000, desired_capabilities=dcap)
 
@@ -61,7 +60,8 @@ class AvitoWebdriver(object):
         driver = self.get_driver()                                
         driver.get(url)           
         elem = driver.find_element_by_class_name("js-item-phone-button_card")
-        elem.click()        
+        elem.click()       
+                        
         WebDriverWait(driver, 10).until(lambda driver : driver.find_elements(By.XPATH, '//div/div/button/img'))           
         res = driver.execute_script("""
           var imgs = document.evaluate("//div/div/button/img", document, null, XPathResult.ANY_TYPE, null);
