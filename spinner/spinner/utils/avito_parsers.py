@@ -29,7 +29,7 @@ class AvitoFleldsParser(BasePhoneImageParser):
         return set(self._sel.xpath('//h1[contains(@class, "title-info-title")]/span/text()').extract())
 
     def breadcrumbs_parser(self):
-        breadcrumbs = self._sel.xpath('//a[contains(@class, "breadcrumb-link")]/text()')
+        breadcrumbs = self._sel.xpath('//a[contains(@class, "js-breadcrumbs-link")]/text()')
         
         breadcrumb = breadcrumbs[-1].extract().lower()
         return breadcrumb
